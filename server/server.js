@@ -10,12 +10,16 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-app.get("api/name", (req, res) => {
+app.get("/api/name", (req, res) => {
   const response = {
     name: "Asheeta",
-    // name: "Enanaye",
+    //  name: "Enanaye",
   };
   res.send(response);
+});
+
+app.get("/api/username", (req, res) => {
+    console.log("Enanaye calling POST Request");
 });
 
 app.listen(port, () => {

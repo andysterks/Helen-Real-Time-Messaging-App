@@ -1,0 +1,14 @@
+{
+  "name": "8-real-time-messaging-app",
+  "version": "1.0.0",
+  "description": "Real-Time-Messaging-App",
+  "main": "index.js",
+  "scripts": {
+    "start": "concurrently \"npm start --prefix client\" \"npm start --prefix server\""
+  },
+  "author": "Helen Redae",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
