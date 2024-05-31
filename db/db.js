@@ -1,9 +1,7 @@
-const Path = require("path");
-require("dotenv").config({
-  override: true,
-  path: Path.join(__dirname, "dev.env"),
-});
 const { Pool, Client } = require("pg");
+const Path = require("path");
+require("dotenv").config();
+
 
 const pool = new Pool({
   user: process.env.USER,

@@ -1,0 +1,50 @@
+CREATE TABLE users (
+  user_id SERIAL PRIMARY KEY,
+  user_name VARCHAR(255) NOT NULL,
+  email VARCHAR(255) NULL,
+  password INT UNIQUE
+);
+
+
+INSERT INTO users (user_id, user_name, email, password) VALUES ( 0,'Tuti', 'bb@gmail.com',424789);
+INSERT INTO users (user_id, user_name, email, password) VALUES ( 1,'Enanaye','her@gmail.com',678901);
+INSERT INTO users (user_id, user_name, email, password) VALUES ( 2,'Asheeta','ashee@gmail.com',213456);
+
+
+
+CREATE TABLE mesages (
+  user_id SERIAL PRIMARY KEY,
+  user_message NOT NULL
+);
+
+
+INSERT INTO messages (user_id, user_message) VALUES ( 0, 'I am a Princess!');
+INSERT INTO messages (user_id, user_message)
+VALUES (1, 'I am a Swan!');
+INSERT INTO messages (user_id, user_message) 
+VALUES (2, 'I am Sponge Bob!');
+
+
+
+-- const dummyUserList =
+--   ({
+--     id: "",
+--     name: "Tuti",
+--     email: "bb@gmail.com",
+--     password: 424789,
+--     message: "Im a Princess!",
+--   },
+--   {
+--     id: "",
+--     name: "Enanaye",
+--     email: "her@gmail.com",
+--     password: 678901,
+--     message: "Im a Swan!",
+--   },
+--   {
+--     id: "",
+--     name: "Asheeta",
+--     email: "ashee@gmail.com",
+--     password: 213456,
+--     message: "Im sponge bob !",
+--   });

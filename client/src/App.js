@@ -20,8 +20,7 @@ function App({userName, password}) {
     <div className='App'>
       <header className='App-header'>
        <Login 
-       userName ={userName}
-       password ={password}
+     
        />
         <p>{name} is the best! </p>
       
