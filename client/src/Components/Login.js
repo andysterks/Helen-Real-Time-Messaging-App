@@ -10,7 +10,7 @@ function Login() {
 
   useEffect(() => {
     axios
-      .get("api/name")
+      .get("http:localhost:3001/api/name")
       .then((response) => {
         setUsername(response.data.name);
       })

@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
-import axios from "../Api/axios";
+import axios from "axios";
 import Login from "./Components/Login";
 
-function App({userName, password}) {
+function App({ userName, password }) {
   const [name, setName] = useState("unknown");
 
   useEffect(() => {
     axios
-      .get("api/name")
+      .get("http:localhost:3001/api/name")
       .then((response) => {
         setName(response.data.name);
       })
@@ -19,11 +19,8 @@ function App({userName, password}) {
   return (
     <div className='App'>
       <header className='App-header'>
-       <Login 
-     
-       />
+        <Login />
         <p>{name} is the best! </p>
-      
       </header>
     </div>
   );
