@@ -1,19 +1,16 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "../Api/axios.js";
 
 function Login() {
-  
-  const [ username, setUsername] = useState('')
-  const [ email, setEmail] = useState('')
-  const [ password, setPassword] = useState('')
- 
-
-  
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  // const [loginSuccess, setLoginSuccsess] = useState(true);
 
   useEffect(() => {
     axios
-      .get("http://localhost:3001/api/username")
+      .get("api/name")
       .then((response) => {
         setUsername(response.data.name);
       })
@@ -22,12 +19,13 @@ function Login() {
       });
   }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(["username :", username],
-    ["email:",email],
-    ["password :",password]
-    )
+    console.log(
+      ["username :", username],
+      ["email:", email],
+      ["password :", password]
+    );
   };
 
   return (
@@ -40,7 +38,7 @@ function Login() {
           name='username'
           value={username}
           placeholder='Enter username or email'
-          onChange={(e) =>setUsername(e.target.value)}
+          onChange={(e) => setUsername(e.target.value)}
         />
       </label>
       <label>
@@ -50,7 +48,7 @@ function Login() {
           name='email'
           value={email}
           placeholder='Enter your email'
-          onChange={(e) =>setEmail(e.target.value)}
+          onChange={(e) => setEmail(e.target.value)}
         />
       </label>
 
@@ -61,13 +59,16 @@ function Login() {
           name='password'
           minLength='4'
           value={password}
-          onChange={(e) =>setPassword( e.target.value)}
+          onChange={(e) => setPassword(e.target.value)}
           placeholder='Enter your password'
         />
       </label>
-      <button type='submit' 
-      // onClick={}
-      >Log In</button>
+      <button
+        type='submit'
+        // onClick={}
+      >
+        Log In
+      </button>
     </form>
   );
 }

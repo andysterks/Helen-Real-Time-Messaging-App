@@ -1,7 +1,8 @@
 const express = require("express");
 const cors = require("cors");
 const app = express();
-const axios = require("axios");
+const pool = require("../db/db");
+
 const port = 3001;
 
 app.use(cors());
@@ -27,13 +28,24 @@ app.post("/api/message", (req, res) => {
 });
 
 // Get all users
-app.get("/api/users", (req, res) => {
-  res.send("all users saying hello!");
+app.get("/api/users", async (req, res) => {
+  try {
+    const allUsers = await pool.query("SELECT * FROM users");
+    res.json("all users saying hello!");
+  } catch (error) {
+    console.error(error);
+  }
 });
 
 // Create a user
-app.post("/api/user", (req, res) => {
-  res.send("created user saying hello!");
+app.post("/api/user", async (req, res) => {
+  const { message } = req.body;
+  const newUser = await pool.query(
+    "INSERT INTO users (message) VALUES ($1) RETURNING *",
+    [message]
+  );
+
+  res.json(newUser.rows[0]);
 });
 
 // Get a single users

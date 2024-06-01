@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "../Api/axios";
 import Login from "./Components/Login";
 
 function App({userName, password}) {
@@ -7,7 +7,7 @@ function App({userName, password}) {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3001/api/name")
+      .get("api/name")
       .then((response) => {
         setName(response.data.name);
       })

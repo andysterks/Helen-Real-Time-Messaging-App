@@ -11,15 +11,22 @@ const pool = new Pool({
   port: process.env.PORT,
 });
 
-(async () => {
-  const client = await pool.connect();
-  try {
-    const { rows } = await pool.query("SELECT current_user");
-    const currentUser = rows[0]["current_user"];
-    console.log(currentUser);
-  } catch (err) {
-    console.error(err);
-  } finally {
-    client.release();
-  }
-})();
+
+
+module.exports = pool;
+
+
+
+
+// (async () => {
+//   const client = await pool.connect();
+//   try {
+//     const { rows } = await pool.query("SELECT current_user");
+//     const currentUser = rows[0]["current_user"];
+//     console.log(currentUser);
+//   } catch (err) {
+//     console.error(err);
+//   } finally {
+//     client.release();
+//   }
+// })();
