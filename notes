@@ -1,0 +1,33 @@
+When a user logs in to an application, the login information typically needs to be verified, and upon successful verification, a mechanism (like a session or a token) is used to maintain the logged-in state. Here’s a typical flow of actions for a login process in a web application:
+
+Flow of Actions for User Login
+<!-- #1 User Enters Credentials: -->
+The user enters their email and password on the login page and submits the form.
+
+<!-- #2 Frontend Sends Login Request: -->
+The frontend sends an HTTP POST request to the backend with the user's credentials.
+
+<!-- #3 Backend Receives Login Request: -->
+The backend receives the login request and extracts the email and password.
+
+<!-- #4 Backend Fetches User Data: -->
+The backend queries the database to fetch the user record corresponding to the provided email.
+
+<!-- #5 Backend Verifies Password: -->
+The backend compares the provided password with the hashed password stored in the database using a library like bcrypt.
+
+<!-- #6 Generate Token (or Session): -->
+If the password is verified, the backend generates a JWT (JSON Web Token) or a session ID.
+
+The token/session ID is sent back to the frontend in the response.
+
+<!-- #7 Frontend Stores Token (or Session): -->
+The frontend stores the token in local storage or session storage, or handles cookies for sessions.
+
+<!-- #8 Subsequent Requests Include Token (or Session): -->
+For any subsequent requests to protected routes, the frontend includes the token in the HTTP headers (usually in the Authorization header).
+
+<!-- #9 Backend Verifies Token (or Session): -->
+The backend verifies the token on each request to ensure the user is authenticated before allowing access to protected resources.
+
+

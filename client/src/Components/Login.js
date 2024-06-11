@@ -1,75 +1,60 @@
-import React from "react";
-import { useState, useEffect } from "react";
-import axios from "../Api/axios.js";
+import React, { useState } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 function Login() {
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  // const [loginSuccess, setLoginSuccsess] = useState(true);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [message, setMessage] = useState('');
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    axios
-      .get("http:localhost:3001/api/name")
-      .then((response) => {
-        setUsername(response.data.name);
-      })
-      .catch((error) => {
-        console.error("There was an error!", error);
-      });
-  }, []);
+  const validateForm = () => email.length > 0 && password.length > 0;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(
-      ["username :", username],
-      ["email:", email],
-      ["password :", password]
-    );
+
+    try {
+      const response = await axios.post('http://localhost:3001/api/login', { email, password });
+
+      setMessage('Login successful');
+      localStorage.setItem('token', response.data.token);
+      navigate('/home');
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        setMessage('User not found, redirecting to register...');
+        navigate('/register');
+      } else {
+        setMessage('Invalid email or password');
+      }
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h1>Log In</h1>
-      <label>
-        Username:
-        <input
-          type='text'
-          name='username'
-          value={username}
-          placeholder='Enter username or email'
-          onChange={(e) => setUsername(e.target.value)}
-        />
-      </label>
-      <label>
-        Email:
-        <input
-          type='email'
-          name='email'
-          value={email}
-          placeholder='Enter your email'
-          onChange={(e) => setEmail(e.target.value)}
-        />
-      </label>
-
-      <label>
-        Password:
-        <input
-          type='password'
-          name='password'
-          minLength='4'
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder='Enter your password'
-        />
-      </label>
-      <button
-        type='submit'
-        // onClick={}
-      >
-        Log In
-      </button>
-    </form>
+    <div>
+      <form onSubmit={handleSubmit}>
+        <h1>Log In</h1>
+        <label>
+          Email:
+          <input
+            type='email'
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder='Enter your email'
+          />
+        </label>
+        <label>
+          Password:
+          <input
+            type='password'
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder='Enter your password'
+          />
+        </label>
+        <button type='submit' disabled={!validateForm()}>Log In</button>
+      </form>
+      {message && <p>{message}</p>}
+    </div>
   );
 }
 
