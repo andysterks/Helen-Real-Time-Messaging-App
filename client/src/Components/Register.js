@@ -7,6 +7,7 @@ function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const validateForm = () =>
@@ -14,22 +15,55 @@ function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setMessage("");
+
+    console.log("Submitting registration with:", {
+      username,
+      email,
+      password,
+    });
 
     try {
-      const response = await axios.post("http://localhost:3001/api/register", {
+      const response = await axios.post("/api/register", {
         username,
         email,
         password,
       });
 
-      setMessage("Registration successful:", response.data);
-      navigate("/login"); // Redirect to login page
-    } catch (error) {
-      if (error.response && error.response.status === 409) {
-        setMessage("Email already registered");
-      } else {
-        setMessage("Error registering. Please try again.");
+      if (response.status === 201) {
+        // Expecting 201 Created for successful registration
+        setMessage("Registration successful!");
+        setUsername("");
+        setEmail("");
+        setPassword("");
+        console.log("Navigating to Login");
+        setTimeout(() => {
+          navigate("/Login");
+        }, 2000);
       }
+    } catch (error) {
+      if (error.response) {
+        console.error("Error in registration request:", error);
+        if (error.response) {
+          if (error.response.status === 409) {
+            setMessage("Email already registered");
+          } else if (error.response.status === 500) {
+            setMessage("Internal server error. Please try again later.");
+            console.error("Server error details:", error.response.data);
+          } else {
+            setMessage(
+              "Error: " + (error.response.data.message || "Registration failed")
+            );
+          }
+        } else if (error.request) {
+          setMessage("No response from server. Please check your connection.");
+        } else {
+          setMessage("Error registering. Please try again.");
+        }
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -64,8 +98,8 @@ function Register() {
             placeholder='Enter your password'
           />
         </label>
-        <button type='submit' disabled={!validateForm()}>
-          Register
+        <button type='submit' disabled={!validateForm() || loading}>
+          {loading ? "Registering..." : "Register"}
         </button>
       </form>
       {message && <p>{message}</p>}

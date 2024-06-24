@@ -1,4 +1,4 @@
-const { Client } = require("pg");
+const { Pool } = require("pg");
 require("dotenv").config();
 
 // DATABASE CONNECTION AND CONFIGURATION
@@ -10,25 +10,29 @@ const database = {
   port: process.env.PORT || 5432,
 };
 
-const client = new Client(database)
-client.connect()
-.then(() => {
-  console.log('Connected to PostgreSQL database');
-  return client.query('SELECT * FROM users'); // Example query
-})
-.then(result => {
-  console.log('Query result:', result.rows);
-  return client.end(); // Close the connection
-})
-.then(() => {
-  console.log('Connection to PostgreSQL closed');
-})
-.catch(err => {
-  if (err.code === 'ECONNREFUSED') {
-    console.error('Connection refused. Ensure PostgreSQL server is running and accessible at', database.host);
-  } else {
-    console.error('Error connecting to PostgreSQL database:', err);
-  }
-});
+const pool = new Pool(database);
+pool
+  .connect()
+  .then(() => {
+    console.log("Connected to PostgreSQL database");
+    return pool.query("SELECT * FROM users"); // Example query
+  })
+  .then((result) => {
+    console.log("Query result:", result.rows);
+    return pool.end(); // Close the connection
+  })
+  .then(() => {
+    console.log("Connection to PostgreSQL closed");
+  })
+  .catch((err) => {
+    if (err.code === "ECONNREFUSED") {
+      console.error(
+        "Connection refused. Ensure PostgreSQL server is running and accessible at",
+        database.host
+      );
+    } else {
+      console.error("Error connecting to PostgreSQL database:", err);
+    }
+  });
 
-module.exports = client;
+module.exports = pool;
