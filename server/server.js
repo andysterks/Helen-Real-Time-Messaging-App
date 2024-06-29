@@ -6,24 +6,12 @@ const { Pool } = require("pg");
 require("dotenv").config();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-// const bodyParser = require('body-parser');
-// app.use(bodyParser.json());
+const bodyParser = require("body-parser");
 
 const port = 3001;
 
-// Database connection configuration
-const pool = new Pool({
-  user: process.env.USER,
-  host: process.env.HOST || "127.0.0.1",
-  database: process.env.DATABASE,
-  password: process.env.PASSWORD,
-  port: process.env.DB_PORT || 5432,
-  idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 2000,
-  keepAlive: true, // Keep the connection alive
-  keepAliveInitialDelayMillis: 30000,
-});
-
+app.use(express.json());
+app.use(bodyParser.json());
 app.use(
   cors({
     origin: "http://localhost:3000", // Allow requests from this origin
@@ -34,22 +22,57 @@ app.use(
   })
 );
 
-app.use(express.json());
+const pool = new Pool({
+  user: process.env.USER,
+  host: process.env.HOST ,
+  database: process.env.DATABASE,
+  password: process.env.PASSWORD,
+  port: process.env.PORT || 5432,
+});
+
+
+pool
+  .connect()
+  .then(() => {
+    console.log("Connected to PostgreSQL database");
+
+    // Execute SQL queries here
+
+    pool.query("SELECT * FROM users", (err, result) => {
+      if (err) {
+        console.error("Error executing query", err);
+      } else {
+        console.log("Query result:", result.rows);
+      }
+
+      // Close the connection when done
+      pool
+        .end()
+        .then(() => {
+          console.log("Connection to PostgreSQL closed");
+        })
+        .catch((err) => {
+          console.error("Error closing connection", err);
+        });
+    });
+  })
+  .catch((err) => {
+    console.error("Error connecting to PostgreSQL database", err);
+  });
 
 // Secret key for JWT
 const SECRET_KEY = process.env.SECRET_KEY;
 
 // Endpoint for user login
-app.post("http://localhost:3000/api/login", async (req, res) => {
-  const { email, password } = req.body;
+app.post("/api/login", async (req, res) => {
+  const { email, password } = req.query.body;
 
   try {
     // Fetch user from database
-    // const client = await pool.connect();
-    const queryResult = await pool.query(
-      "SELECT * FROM users WHERE email = $1",
-      [email]
-    );
+    const pool = await pool.connect();
+    const database = await pool.query("SELECT * FROM users WHERE email = $1", [
+      email,
+    ]);
     const user = queryResult.rows[0];
 
     if (!user) {
@@ -73,56 +96,6 @@ app.post("http://localhost:3000/api/login", async (req, res) => {
     res
       .status(500)
       .json({ message: "Internal server error", error: error.message });
-  }
-});
-
-// Dummy data for testing
-// const dummyUser = {
-//   id: 1,
-//   email: "mim@gmail.com",
-//   password: "123456"
-// };
-
-// Login endpoint
-// app.post("/api/login", async (req, res) => {
-//   const { email, password } = req.body;
-//   console.log("Received login request:", req.body);
-//   try {
-//     const client = await pool.connect();
-//     const queryResult = await client.query(
-//       "SELECT * FROM users WHERE email = $1",
-//       [email]
-//     );
-//     // client.release();
-
-//     // const user = queryResult.rows[0];
-
-//     if (!user) {
-//       return res.status(404).json({ message: "User not found" });
-//     }
-
-//     const isMatch = await bcrypt.compare(password, user.password);
-//     if (!isMatch) {
-//       return res.status(401).json({ message: "Invalid email or password" });
-//     }
-
-//     const token = jwt.sign({ id: user.id, email: user.email }, SECRET_KEY, {
-//       expiresIn: "1h",
-//     });
-
-//     res.json({ token });
-//   } catch (error) {
-//     console.error("Error during login:", error);
-//     res.status(500).json({ message: "Internal server error" });
-//   }
-// });
-// Middleware to protect routes
-
-pool.connect((err) => {
-  if (err) {
-    console.error("Failed to connect to database:", err);
-  } else {
-    console.log("Connected to the database");
   }
 });
 
@@ -170,7 +143,7 @@ app.post("/api/register", async (req, res) => {
   console.log("User registered successfully. Token generated");
 
   res.status(201).json({ user: newUser, token });
-
+  // res.send(`User ${username} registered successfully`);
   console.error("Error during registration:", error);
   res
     .status(500)

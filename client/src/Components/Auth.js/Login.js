@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import  "./Components/Auth.js/Auth.css";
+
+
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -15,7 +18,7 @@ function Login() {
     // setMessage("");
 
     try {
-      const response = await axios.post("http://localhost:3000/api/login", {
+      const response = await axios.post("/api/login", {
         email,
         password,
       });
@@ -53,7 +56,7 @@ function Login() {
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
+      <form className="login" onSubmit={handleSubmit}>
         <h1>Log In</h1>
         <label htmlFor='email'>Email:</label>
         <input
