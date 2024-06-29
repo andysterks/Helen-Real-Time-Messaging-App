@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import  "./Components/Auth.js/Auth.css";
+import  "./Components/Authorization/Auth.css";
 
 
 

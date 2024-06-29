@@ -1,11 +1,11 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Login from "./Components/Auth.js/Login";
-import Register from "./Components/Auth.js/Register";
+import Login from "./Components/Authorization/Login";
+import Register from "./Components/Authorization/Register";
 import HomePage from "./Components/HomePage";
 import ChatDisplay from "./Components/ChatHomePage/ChatDisplay";
 import Chats from "./Components/ChatHomePage/Chats";
-import  "./Components/Auth.js/Auth.css";
+import  "./Components/Authorization/Auth.css";
 
 function App() {
   return (
