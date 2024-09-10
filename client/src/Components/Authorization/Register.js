@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import "./Components/Authorization/Auth.css";
-
 
 
 function Register() {
@@ -10,75 +8,48 @@ function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
-  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
-  const validateForm = () =>
-    email.length > 0 && password.length > 0 && username.length > 0;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // setLoading(true);
-    setMessage("");
-    // setUsername("");
-    // setEmail("");
-    // setPassword("");
+    setMessage(e.target.value);
 
-    console.log("Submitting registration with:", {
-      username,
-      email,
-      password,
-    });
+    // console.log("Submitting registration with:", {
+    //   username,
+    //   email,
+    //   password,
+    // });
 
     try {
-      const response = await axios.post("/api/register", {
+      const response = await axios.post("http://localhost:3000/register", {
         username,
         email,
         password,
       });
 
-      if (response.status === 201) {
-        // Expecting 201 Created for successful registration
-        setMessage("Registration successful!");
-        console.log("Navigating to Login");
-        setTimeout(() => {
-          navigate("/Login");
-        }, 2000);
+      if (response.status === 200) {
+        setMessage(response.data.message);
+        console.log("Navigating to LoginPage");
+        navigate("/login");
       }
     } catch (error) {
-      if (error.response) {
-        console.error("Error in registration request:", error);
-        if (error.response) {
-          if (error.response.status === 409) {
-            setMessage("Email already registered");
-          } else if (error.response.status === 500) {
-            setMessage("Internal server error. Please try again later.");
-            console.error("Server error details:", error.response.data);
+      if (error.response && error.response.status === 409) {
+        setMessage("Email already registered. Try Logging in.");
+      } else {
+        setMessage("Error registering. Please try again.");
       }
-      else {
-        setMessage(
-          "Error: " + (error.response.data.message || "Registration failed")
-        );
-      }
-          } else if (error.request) {
-            setMessage("No response from server. Please check your connection.");
-          } else {
-            setMessage("Error registering. Please try again.");
-          }
-        }
-      } finally {
-        setLoading(false);
     }
   };
 
   return (
     <div>
-      <form className="register" onSubmit={handleSubmit}>
+      <form className='register' onSubmit={handleSubmit}>
         <h1>Register</h1>
         <label>
           Username:
           <input
             className='username'
+            name='username'
             type='text'
             value={username}
             onChange={(e) => setUsername(e.target.value)}
@@ -88,7 +59,8 @@ function Register() {
         <label>
           Email:
           <input
-          className="email"
+            className='email'
+            name='email'
             type='email'
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -98,15 +70,16 @@ function Register() {
         <label>
           Password:
           <input
-           className="passwd"
+            className='passwd'
+            name='password'
             type='password'
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder='Enter your password'
           />
         </label>
-        <button type='submit' disabled ={!validateForm() || loading}>
-        {loading ? "Registering..." : "Register"}
+        <button type='submit' onSubmit={handleSubmit}>
+          Register
         </button>
       </form>
       {message && <p>{message}</p>}

@@ -3,7 +3,7 @@ import axios from "axios";
 
 function Chats({ setChats }) {
   const [chatUser, setChatUser] = useState("");
-  const [userLabel] = useState("userName");
+  const [userLabel, setUserLabel] = useState("UserName");
 
   const handleCreateChat = async (e) => {
     e.preventDefault(); // Prevent default form submission behavior
@@ -47,7 +47,7 @@ function Chats({ setChats }) {
 
   return (
     <form onSubmit={handleCreateChat} className='new-chat-form'>
-      <label>
+      <label onChange={(e)=> setUserLabel(userLabel)}>
         {userLabel}:
         <input
           type='text'
@@ -55,10 +55,13 @@ function Chats({ setChats }) {
           onChange={handleUserChange}
           placeholder='What is up?!'
         />
+         <button type='submit'>Send</button>
       </label>
-      <button type='submit'>Send</button>
+     
     </form>
   );
 }
 
 export default Chats;
+
+

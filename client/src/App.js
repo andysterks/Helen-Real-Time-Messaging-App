@@ -5,18 +5,26 @@ import Register from "./Components/Authorization/Register";
 import HomePage from "./Components/HomePage";
 import ChatDisplay from "./Components/ChatHomePage/ChatDisplay";
 import Chats from "./Components/ChatHomePage/Chats";
-import  "./Components/Authorization/Auth.css";
+import { useState, useEffect } from "react";
 
 function App() {
+  const [message, setMessage] = useState("");
+  useEffect(() => {
+    fetch("/")
+      .then((res) => res.text())
+      .then((data) => setMessage(data))
+      .catch((err) => console.log(err));
+  }, []);
+
   return (
     <div className='app'>
       <BrowserRouter>
         <Routes>
-          <Route path='/' element={<Login />} />
-          <Route path='/Register' element={<Register />} />
-          <Route path='/HomePage' element={<HomePage />} />
-          <Route path='/ChatDisplay' element={<ChatDisplay />} />
-          <Route path='/Chats' element={<Chats />} />
+          <Route path='/' element={<Login message={message} />} />
+          <Route path='/register' element={<Register />} />
+          <Route path='/homepage' element={<HomePage />} />
+          <Route path='/chatdisplay' element={<ChatDisplay />} />
+          <Route path='/chats' element={<Chats />} />
         </Routes>
       </BrowserRouter>
     </div>

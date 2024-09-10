@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import ChatDisplay from "./ChatHomePage/ChatDisplay";
 import Chats from "./ChatHomePage/Chats";
 
 function HomePage() {
+  const [name, setName] = useState("user");
   const [user, setUser] = useState("newUser");
   const [chats, setChats] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Fetch user info and chats when the component mounts
@@ -35,22 +38,27 @@ function HomePage() {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    window.location.reload(); // Reload to trigger redirect to login if no token
+    window.location.reload();
+    setTimeout(() => {
+      navigate("/Login");
+    }, 2000);
+    // Reload to trigger redirect to login if no token
   };
 
   return (
     <div className='home-page'>
       {user ? (
         <>
-          <h1>Welcome, {user}!</h1>
+          <h1 value={name} onChange={(e) => setName(e.target.value)}>Welcome, {name}!</h1>
           <button onClick={handleLogout}>Log Out</button>
         </>
       ) : (
         <p>Loading...</p>
       )}
-
-      <ChatDisplay chats={chats} />
-      <Chats setChats={setChats} />
+      <div>
+        <ChatDisplay chats={chats} />
+        <Chats setChats={setChats} />
+      </div>
     </div>
   );
 }

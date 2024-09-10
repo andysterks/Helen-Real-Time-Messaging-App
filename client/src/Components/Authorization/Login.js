@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import  "./Components/Authorization/Auth.css";
-
-
+import "../Authorization/LogIn.css";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -11,23 +9,26 @@ function Login() {
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
-  const validateForm = () => email.length > 0 && password.length > 0;
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // setMessage("");
+    console.log("email:", email)
+    console.log("password:", password)
 
     try {
-      const response = await axios.post("/api/login", {
+      const response = await axios.post("http://localhost:3000/login", {
         email,
         password,
       });
+
+      setMessage(response.data.message);
+     
+      localStorage.setItem('token', response.data.token);
       console.log("Server response:", response.data);
       if (response.status === 200) {
         setMessage("Login successful");
-        sessionStorage.setItem("token", response.data.token);
+        localStorage.setItem("token", response.data.token);
         console.log("Navigating to HomePage");
-        navigate("/HomePage");
+        navigate("/homepage");
       }
     } catch (error) {
       if (error.response) {
@@ -35,40 +36,33 @@ function Login() {
           setMessage("User not found. Redirecting to register...");
           console.log("Navigating to Register");
           setTimeout(() => {
-            navigate("/Register");
+            navigate("/register");
           }, 2000);
         } else if (error.response.status === 401) {
           setMessage("Invalid email or password. Please try again.");
         } else {
           setMessage(`An error occurred: ${error.response.statusText}`);
         }
-      } else if (error.request) {
-        console.error("No response received:", error.request);
-        setMessage("No response from server. Please try again later.");
-      } else {
-        console.error("Error:", error.message);
-        setMessage(
-          "Unable to connect to the server. Please check your connection and try again."
-        );
       }
     }
   };
 
   return (
     <div>
-      <form className="login" onSubmit={handleSubmit}>
+      <form className='login' onSubmit={handleSubmit}>
         <h1>Log In</h1>
         <label htmlFor='email'>Email:</label>
-        <input
+        <input className="input"
           id='email'
           type='email'
           name='email'
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder='Enter your email'
+          title='Please enter a valid e-mail'
           required
         />
-        <label htmlFor='password'>Password:</label>
+        <label className='password'>Password:</label>
         <input
           id='password'
           type='password'
@@ -76,11 +70,10 @@ function Login() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           placeholder='Enter your password'
+          title="Please enter correct password!"
           required
         />
-        <button type='submit' disabled={!validateForm()}>
-          Log In
-        </button>
+        <button type='submit'>Log In</button>
       </form>
       {message && <p>{message}</p>}
     </div>
