@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const jwt = require("./jwt.js");
+const cookieParser = require("cookie-parser");
 
 router.get("/", async (req, res) => {
   try {

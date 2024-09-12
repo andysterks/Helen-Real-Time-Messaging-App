@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 require("dotenv").config;
+const cookieParser = require("cookie-parser");
 
 const token = req.header("x-auth-token");
 
@@ -28,3 +29,9 @@ if (user.length > 0) {
     }
   );
 }
+res.cookie("authToken", token, {
+  httpOnly: true, // Prevents JS from accessing the cookie
+  secure: process.env.NODE_ENV === "production", // Set to true in production (HTTPS)
+  maxAge: 3600000, // 1 hour
+  sameSite: "strict", // Prevents CSRF
+});

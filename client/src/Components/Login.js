@@ -14,13 +14,10 @@ function Login() {
     e.preventDefault();
 
     try {
-      const response = await axios
-        .post(`http://localhost:3000`, loginValue)
-        .then((result) => {
-          setMessage(response.data.message);
-          console.log("Navigating to HomePage");
-          navigate("/homepage");
-        });
+      const response = await axios.post(`http://localhost:3000`, loginValue);
+     setLoginValue(response.data)
+      console.log("Navigating to HomePage");
+      navigate("/homepage");
     } catch (error) {
       if (error.response) {
         if (error.response.status === 404) {
@@ -49,7 +46,9 @@ function Login() {
           type='email'
           name='email'
           value={loginValue.email}
-          onChange={(e) => setLoginValue(e.target.value)}
+          onChange={(e) =>
+            setLoginValue({ ...loginValue, [e.target.name]: e.target.value })
+          }
           placeholder='Enter your email'
           title='Please enter a valid e-mail'
           required
@@ -60,7 +59,9 @@ function Login() {
           type='password'
           name='password'
           value={loginValue.password}
-          onChange={(e) => setLoginValue(e.target.value)}
+          onChange={(e) =>
+            setLoginValue({ ...loginValue, [e.target.name]: e.target.value })
+          }
           placeholder='Enter your password'
           title='Please enter correct password!'
           required

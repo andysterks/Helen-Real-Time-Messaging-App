@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const router = express.Router();
-const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const db = require("./db");
 const { Pool } = require("pg");
@@ -13,17 +13,7 @@ const port = 3001;
 
 app.use(cors());
 app.use(express.json());
-// app.use(bodyParser.json());
-// app.use(bodyParser.urlencoded({ extended: true }));
-// app.use(
-//   cors({
-//     origin: "http://localhost:3000",
-//     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-//     headers: ["Content-Type", "Authorization"],
-//     credentials: true,
-//     optionsSuccessStatus: 204,
-//   })
-// );
+
 
 const pool = new Pool({
   user: process.env.USER,
