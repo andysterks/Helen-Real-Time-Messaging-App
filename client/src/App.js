@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Login from "./Components/Authorization/Login";
-import Register from "./Components/Authorization/Register";
+import Login from "./Components/Login";
+import Register from "./Components/Register";
 import HomePage from "./Components/HomePage";
 import ChatDisplay from "./Components/ChatHomePage/ChatDisplay";
 import Chats from "./Components/ChatHomePage/Chats";

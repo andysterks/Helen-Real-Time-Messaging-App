@@ -1,35 +1,26 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import "../Authorization/LogIn.css";
 
 function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [loginValue, setLoginValue] = useState({
+    email: "",
+    password: "",
+  });
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("email:", email)
-    console.log("password:", password)
 
     try {
-      const response = await axios.post("http://localhost:3000/login", {
-        email,
-        password,
-      });
-
-      setMessage(response.data.message);
-     
-      localStorage.setItem('token', response.data.token);
-      console.log("Server response:", response.data);
-      if (response.status === 200) {
-        setMessage("Login successful");
-        localStorage.setItem("token", response.data.token);
-        console.log("Navigating to HomePage");
-        navigate("/homepage");
-      }
+      const response = await axios
+        .post(`http://localhost:3000`, loginValue)
+        .then((result) => {
+          setMessage(response.data.message);
+          console.log("Navigating to HomePage");
+          navigate("/homepage");
+        });
     } catch (error) {
       if (error.response) {
         if (error.response.status === 404) {
@@ -52,12 +43,13 @@ function Login() {
       <form className='login' onSubmit={handleSubmit}>
         <h1>Log In</h1>
         <label htmlFor='email'>Email:</label>
-        <input className="input"
+        <input
+          className='input'
           id='email'
           type='email'
           name='email'
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          value={loginValue.email}
+          onChange={(e) => setLoginValue(e.target.value)}
           placeholder='Enter your email'
           title='Please enter a valid e-mail'
           required
@@ -67,10 +59,10 @@ function Login() {
           id='password'
           type='password'
           name='password'
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          value={loginValue.password}
+          onChange={(e) => setLoginValue(e.target.value)}
           placeholder='Enter your password'
-          title="Please enter correct password!"
+          title='Please enter correct password!'
           required
         />
         <button type='submit'>Log In</button>

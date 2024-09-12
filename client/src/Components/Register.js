@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-
 function Register() {
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [inputValue, setInputValue] = useState({
+    username: "",
+    email: "",
+    password: "",
+  });
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
@@ -14,23 +15,19 @@ function Register() {
     e.preventDefault();
     setMessage(e.target.value);
 
-    // console.log("Submitting registration with:", {
-    //   username,
-    //   email,
-    //   password,
-    // });
-
     try {
-      const response = await axios.post("http://localhost:3000/register", {
-        username,
-        email,
-        password,
-      });
+      const response = await axios
+        .post(`http://localhost:3000/register`, inputValue)
+        .then((response) => {
+          setMessage(response.data.message);
+          console.log("Navigating to LoginPage");
+          navigate("/");
+        });
 
       if (response.status === 200) {
         setMessage(response.data.message);
         console.log("Navigating to LoginPage");
-        navigate("/login");
+        navigate("/");
       }
     } catch (error) {
       if (error.response && error.response.status === 409) {
@@ -51,8 +48,8 @@ function Register() {
             className='username'
             name='username'
             type='text'
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            value={inputValue.username}
+            onChange={(e) => setInputValue(e.target.value)}
             placeholder='Enter your username'
           />
         </label>
@@ -62,8 +59,8 @@ function Register() {
             className='email'
             name='email'
             type='email'
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={inputValue.email}
+            onChange={(e) => setInputValue(e.target.value)}
             placeholder='Enter your email'
           />
         </label>
@@ -73,8 +70,8 @@ function Register() {
             className='passwd'
             name='password'
             type='password'
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={inputValue.password}
+            onChange={(e) => setInputValue(e.target.value)}
             placeholder='Enter your password'
           />
         </label>
