@@ -1,14 +1,14 @@
 const express = require("express");
 const router = express.Router();
+const bcrypt = require("bcrypt");
 // const jwt = require("./jwt");
+const db = require("./db");
 
-
-
-router.post("/register", async (req, res) => {
-  const { username, email } = req.body;
-  console.log(req.body);
+router.post("http://localhost:3000/register", async (req, res) => {
+  const { username, email, password } = req.body;
+  // console.log(req.body);
   try {
-    const isUserExisting = await pool.query(
+    const isUserExisting = await db.query(
       "SELECT * FROM users WHERE email = $1",
       [email]
     );
@@ -19,13 +19,13 @@ router.post("/register", async (req, res) => {
         .json({ message: "Email already registered. Try Logging in." });
     }
 
-    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     const newUser = await pool.query(
-      "INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING *",
-      [username, email, hashedPassword]
+      "INSERT INTO users (username, email, hashedPassword"
     );
     res.json({ users: newUser.rows });
+    return res.status(201).json({ message: "Registered Successfully!" });
   } catch (error) {
     console.error("Error during registration:", error);
     res
@@ -33,6 +33,5 @@ router.post("/register", async (req, res) => {
       .json({ message: "Internal server error", error: error.message });
   }
 });
-
 
 module.exports = router;

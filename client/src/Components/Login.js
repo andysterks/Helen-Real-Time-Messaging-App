@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 function Login() {
-  const [loginValue, setLoginValue] = useState({
+  const [userLoginValue, setUserLoginValue] = useState({
     email: "",
     password: "",
   });
@@ -14,8 +14,8 @@ function Login() {
     e.preventDefault();
 
     try {
-      const response = await axios.post(`http://localhost:3000`, loginValue);
-     setLoginValue(response.data)
+      const response = await axios.post("/login", userLoginValue);
+      setUserLoginValue(response.data);
       console.log("Navigating to HomePage");
       navigate("/homepage");
     } catch (error) {
@@ -37,7 +37,13 @@ function Login() {
 
   return (
     <div>
-      <form className='login' onSubmit={handleSubmit}>
+      <form
+        form
+        action='http://localhost:3000/'
+        method='POST'
+        className='login'
+        onSubmit={handleSubmit}
+      >
         <h1>Log In</h1>
         <label htmlFor='email'>Email:</label>
         <input
@@ -45,9 +51,12 @@ function Login() {
           id='email'
           type='email'
           name='email'
-          value={loginValue.email}
+          value={userLoginValue.email}
           onChange={(e) =>
-            setLoginValue({ ...loginValue, [e.target.name]: e.target.value })
+            setUserLoginValue({
+              ...userLoginValue,
+              [e.target.name]: e.target.value,
+            })
           }
           placeholder='Enter your email'
           title='Please enter a valid e-mail'
@@ -58,9 +67,12 @@ function Login() {
           id='password'
           type='password'
           name='password'
-          value={loginValue.password}
+          value={userLoginValue.password}
           onChange={(e) =>
-            setLoginValue({ ...loginValue, [e.target.name]: e.target.value })
+            setUserLoginValue({
+              ...userLoginValue,
+              [e.target.name]: e.target.value,
+            })
           }
           placeholder='Enter your password'
           title='Please enter correct password!'
