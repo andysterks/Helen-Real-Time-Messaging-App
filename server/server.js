@@ -5,8 +5,9 @@ const path = require("path");
 const { Pool } = require("pg");
 const loginRoutes = require("./router/loginRouters");
 const registerRoutes = require("./router/registerRouters");
+const { createDeflate } = require("zlib");
 const router = express.Router();
-require("dotenv").config();
+require("dotenv").config();createDeflate
 
 const port = 3001;
 
