@@ -14,7 +14,7 @@ function Login() {
     e.preventDefault();
 
     try {
-      const response = await axios.post("/login", userLoginValue);
+      const response = await axios.post("/api", userLoginValue);
       setUserLoginValue(response.data);
       console.log("Navigating to HomePage");
       navigate("/homepage");
@@ -37,13 +37,7 @@ function Login() {
 
   return (
     <div>
-      <form
-        form
-        action='http://localhost:3000/'
-        method='POST'
-        className='login'
-        onSubmit={handleSubmit}
-      >
+      <form className='login' onSubmit={handleSubmit}>
         <h1>Log In</h1>
         <label htmlFor='email'>Email:</label>
         <input

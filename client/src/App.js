@@ -5,18 +5,10 @@ import Register from "./Components/Register";
 import HomePage from "./Components/HomePage";
 import ChatDisplay from "./Components/ChatHomePage/ChatDisplay";
 import Chats from "./Components/ChatHomePage/Chats";
-import { useState, useEffect } from "react";
 
-function App() {
-  const [message, setMessage] = useState("");
-  useEffect(() => {
-    fetch("/")
-      .then((res) => res.text())
-      .then((data) => setMessage(data))
-      .catch((err) => console.log(err));
-  }, []);
-
-  return (
+function App({message}) {
+  
+   return (
     <div className='app'>
       <BrowserRouter>
         <Routes>

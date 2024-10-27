@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const jwt = require("./jwt.js");
+const jwt = require("../jwt.js");
 const bcrypt = require("bcrypt");
-const db = require("./db");
+const db = require("../db");
 
-router.post("/login", async (req, res) => {
+router.post("api/login", async (req, res) => {
   const { email, password } = req.body;
 
   console.log(req.body);
@@ -19,22 +19,21 @@ router.post("/login", async (req, res) => {
       return res.status(400).json({ message: "User not found!" });
     }
 
-      const passwordIsMatch = await bcrypt.compare(
-        password,
-        user.rows[0].password
-      );
+    const passwordIsMatch = await bcrypt.compare(
+      password,
+      user.rows[0].password
+    );
 
-      if (!passwordIsMatch) {
-        return res.status(400).json({ message: "Enter the correct password!" });
-      }
-      const token = jwt.sign(
-        { id: user.rows[0].id, email: user.rows[0].email },
-        JWT_SECRET,
-        { expiresIn: "1h" }
-      );
+    if (!passwordIsMatch) {
+      return res.status(400).json({ message: "Enter the correct password!" });
+    }
+    const token = jwt.sign(
+      { id: user.rows[0].id, email: user.rows[0].email },
+      JWT_SECRET,
+      { expiresIn: "1h" }
+    );
 
-      res.json({ message: "Login successful!", token });
-    
+    res.json({ message: "Login successful!", token });
   } catch (error) {
     res.status(500).json({ message: "Error logging in!" });
   }
@@ -44,7 +43,9 @@ router.post("/data", async (req, res) => {
   const { email } = req.body;
 
   try {
-    const data = await pool.query("SELECT * FROM data WHERE user_email = $1", [email]);
+    const data = await pool.query("SELECT * FROM data WHERE user_email = $1", [
+      email,
+    ]);
     res.json(data.rows);
   } catch (err) {
     console.error("Error fetching data:", err.message);

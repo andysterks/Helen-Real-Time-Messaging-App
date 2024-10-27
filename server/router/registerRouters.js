@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
-// const jwt = require("./jwt");
-const db = require("./db");
+const jwt = require("../jwt");
+const db = require("../db");
 
-router.post("http://localhost:3000/register", async (req, res) => {
+router.post("api/register", async (req, res) => {
   const { username, email, password } = req.body;
   // console.log(req.body);
   try {

@@ -17,7 +17,7 @@ function Register() {
 
     try {
       const response = await axios
-        .post("http://localhost:3000/register", inputValue)
+        .post("api/register", inputValue)
         .then((response) => {
           setInputValue(response.data.message);
           console.log("Navigating to LoginPage");

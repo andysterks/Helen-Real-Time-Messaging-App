@@ -1,25 +1,22 @@
- const express = require("express");
- const app = express();
- const cors = require("cors");
- const path = require("path");
- const { Pool } = require("pg");
- const router = express.Router();
- require("dotenv").config();
+const express = require("express");
+const app = express();
+const cors = require("cors");
+const path = require("path");
+const { Pool } = require("pg");
+const loginRoutes = require("./router/loginRouters");
+const registerRoutes = require("./router/registerRouters");
+const router = express.Router();
+require("dotenv").config();
 
 const port = 3001;
 
 
-// app.use(express.static(path.join(__dirname, "..", "client", "dist")));
-
-// app.get("/*", async (req, res) => {
-//   res.sendFile(path.join(__dirname, "..", "client", "dist", "index.html"));
-// });
-
 
 app.use(cors());
 app.use(express.json());
-app.use("/api", router); 
-
+app.use("/api", router);
+app.use("/api", loginRoutes);
+app.use("/api", registerRoutes);
 
 const pool = new Pool({
   user: process.env.USER,
@@ -32,8 +29,6 @@ const pool = new Pool({
 pool.connect().then(() => {
   console.log("Connected to PostgreSQL database");
 });
-
-
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
