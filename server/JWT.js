@@ -1,8 +1,5 @@
 // const jwt = require("jsonwebtoken");
 // require("dotenv").config;
-// // const cookieParser = require("cookie-parser");
-
-// const token = req.header("x-auth-token");
 
 // // Check if no token
 // if (!token) {

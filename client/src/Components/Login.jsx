@@ -14,7 +14,7 @@ function Login() {
     e.preventDefault();
 
     try {
-      const response = await axios.post("/api", userLoginValue);
+      const response = await axios.post("/api/login", userLoginValue);
       setUserLoginValue(response.data);
       console.log("Navigating to HomePage");
       navigate("/homepage");
@@ -22,7 +22,7 @@ function Login() {
       if (error.response) {
         if (error.response.status === 404) {
           setMessage("User not found. Redirecting to register...");
-          console.log("Navigating to Register");
+           console.log("Navigating to Register");
           setTimeout(() => {
             navigate("/register");
           }, 2000);
@@ -33,7 +33,7 @@ function Login() {
         }
       }
     }
-  };
+   };
 
   return (
     <div>

@@ -1,12 +1,14 @@
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
-const jwt = require("../jwt");
+// const jwt = require("../jwt");
 const db = require("../db");
 
-router.post("api/register", async (req, res) => {
+router.post("/api/register", async (req, res) => {
+
+  console.log("Help!");
   const { username, email, password } = req.body;
-  // console.log(req.body);
+ 
   try {
     const isUserExisting = await db.query(
       "SELECT * FROM users WHERE email = $1",
