@@ -13,16 +13,9 @@ function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setMessage(e.target.value);
 
     try {
-      const response = await axios
-        .post("/api/register", inputValue)
-        .then((response) => {
-          setInputValue(response.data.message);
-          console.log("Navigating to LoginPage");
-          navigate("/");
-        });
+      const response = await axios.post("/api/register", inputValue);
 
       if (response.status === 200) {
         setMessage(response.data.message);
@@ -38,46 +31,52 @@ function Register() {
     }
   };
 
+  const handleOnChange = (e) => {
+    const { name, value } = e.target;
+    setInputValue((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
   return (
     <div>
-      <form className='register' onSubmit={handleSubmit}>
+      <form className="register" onSubmit={handleSubmit}>
         <h1>Register</h1>
         <label>
           Username:
           <input
-            className='username'
-            name='username'
-            type='text'
+            className="username"
+            name="username"
+            type="text"
             value={inputValue.username}
-            onChange={(e) => setInputValue(e.target.value)}
-            placeholder='Enter your username'
+            onChange={handleOnChange}
+            placeholder="Enter your username"
           />
         </label>
         <label>
           Email:
           <input
-            className='email'
-            name='email'
-            type='email'
+            className="email"
+            name="email"
+            type="email"
             value={inputValue.email}
-            onChange={(e) => setInputValue(e.target.value)}
-            placeholder='Enter your email'
+            onChange={handleOnChange}
+            placeholder="Enter your email"
           />
         </label>
         <label>
           Password:
           <input
-            className='passwd'
-            name='password'
-            type='password'
+            className="passwd"
+            name="password"
+            type="password"
             value={inputValue.password}
-            onChange={(e) => setInputValue(e.target.value)}
-            placeholder='Enter your password'
+            onChange={handleOnChange}
+            placeholder="Enter your password"
           />
         </label>
-        <button type='submit' onSubmit={handleSubmit}>
-          Register
-        </button>
+        <button type="submit">Register</button>
       </form>
       {message && <p>{message}</p>}
     </div>
