@@ -4,14 +4,12 @@ const cors = require("cors");
 const { Pool } = require("pg");
 const loginRoutes = require("./router/loginRouters");
 const registerRoutes = require("./router/registerRouters");
-const router = express.Router();
 require("dotenv").config();
 
 const port = 3001;
 
 app.use(cors());
 app.use(express.json());
-app.use("/api", router);
 app.use("/api", loginRoutes);
 app.use("/api", registerRoutes);
 

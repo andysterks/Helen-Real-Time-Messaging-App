@@ -15,15 +15,14 @@ function Login() {
 
     try {
       const response = await axios.post("/api/login", userLoginValue);
-      setUserLoginValue(response.data);
-      console.log("Navigating to HomePage");
+      setUserLoginValue(response)
+      setMessage("Login successful!");
       navigate("/homepage");
     } catch (error) {
       if (error.response) {
         if (error.response.status === 404) {
           setMessage("User not found. Redirecting to register...");
-           console.log("Navigating to Register");
-          setTimeout(() => {
+           setTimeout(() => {
             navigate("/register");
           }, 2000);
         } else if (error.response.status === 401) {
@@ -56,7 +55,7 @@ function Login() {
           title='Please enter a valid e-mail'
           required
         />
-        <label className='password'>Password:</label>
+        <label htmlFor='password'>Password:</label>
         <input
           id='password'
           type='password'
